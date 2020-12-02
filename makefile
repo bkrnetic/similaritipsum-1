@@ -35,7 +35,7 @@ DOCKER_IMAGES_LIST 	:= $(docker images -qa -f dangling=true)
 .PHONY       =  # Not needed here, but you can put your all your targets to be sure
                 # there is no name conflict between your files and your targets.
 
-## —— 🐝 The Strangebuzz Symfony Makefile 🐝 ———————————————————————————————————
+## ——  Symfony Makefile  ———————————————————————————————————
 help: ## Outputs this help screen
 	@grep -E '(^[a-zA-Z0-9_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}{printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
 
@@ -55,25 +55,6 @@ php-set-7-4: ## Set php 7.4 as the current PHP version
 	$(BREW) unlink php@7.2 && brew unlink php@7.3
 	$(BREW) link php@7.4 --force
 
-## —— Symfony 🎵 ———————————————————————————————————————————————————————————————
-sf: ## List all Symfony commands
-	$(SYMFONY)
-
-cc: ## Clear the cache. DID YOU CLEAR YOUR CACHE????
-	$(SYMFONY) cache:clear
-
-warmup: ## Warmup the cache
-	$(SYMFONY) cache:warmup
-
-fix-perms: ## Fix permissions of all var files
-	chmod -R 777 var/*
-
-assets: purge ## Install the assets with symlinks in the public folder
-	$(SYMFONY) assets:install public/ --symlink --relative
-
-purge: ## Purge cache and logs
-	rm -rf var/cache/* var/logs/*
-
 ## —— Docker 🐳 ————————————————————————————————————————————————————————————————
 
 up: ## Start the docker hub (MySQL,redis,adminer,elasticsearch,head,Kibana)
@@ -89,7 +70,7 @@ down: ## Stop the docker hub
 bash: ## Connect to the application container
 	$(DOCKER) container exec -it php74-container bash
 
-## —— Project 🐝 ———————————————————————————————————————————————————————————————
+## —— Project  ———————————————————————————————————————————————————————————————
 build: ##@setup build docker images
 	$(DOCKER_COMPOSE) build
 .PHONY: build
@@ -126,9 +107,6 @@ composer-install: ##setup install composer packages
 #	@if [ -d "vendor" ]; then rm -rf vendor; fi
 #.PHONY: clean-vendor
 
-
-commands: ## Display all commands in the project namespace
-	$(SYMFONY) list $(PROJECT)
 
 ## —— Stats 📜 —————————————————————————————————————————————————————————————————
 stats: ## Commits by the hour for the main author of this project
